@@ -1,5 +1,6 @@
 import React from "react";
 import logo from "../assets/logo.svg";
+import { Link } from "react-router-dom";
 
 const Hero = () => {
   const [menuOpen, setMenuOpen] = React.useState(false);
@@ -30,24 +31,24 @@ const Hero = () => {
             <a href="#testimonials" className="hover:text-green-600 transition">
               Testimonials
             </a>
-            <a href="#contact" className="hover:text-green-600 transition">
+            <a href="#cta" className="hover:text-green-600 transition">
               Contact
             </a>
           </div>
 
           <div className="flex gap-2">
-            <a
-              href=""
+            <Link
+              to=""
               className="hidden lg:block px-6 py-2 bg-green-500 hover:bg-green-700 active:scale-95 transition-all rounded-full text-white"
             >
               Get started
-            </a>
-            <a
-              href=""
+            </Link>
+            <Link
+              to="/login"
               className="hidden lg:block px-6 py-2 border active:scale-95 hover:bg-slate-50 transition-all rounded-full text-slate-700 hover:text-slate-900"
             >
               Login
-            </a>
+            </Link>
           </div>
 
           <button
@@ -83,7 +84,7 @@ const Hero = () => {
           <a href="#testimonials" className="text-white">
             Testimonials
           </a>
-          <a href="#contact" className="text-white">
+          <a href="#cta" className="text-white">
             Contact
           </a>
           <div className="flex gap-2">
