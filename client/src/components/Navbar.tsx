@@ -11,11 +11,11 @@ const Navbar = () => {
   };
   return (
     <div className="bg-white shadow">
-      <nav className="flex justify-between items-center py-5 px-20">
+      <nav className="flex justify-between items-center py-5 px-5 md:px-10 lg:px-20">
         <img
           src={logo}
           alt="logo"
-          className="h-10 w-auto cursor-pointer"
+          className="md:h-10 h-8 w-auto cursor-pointer"
           onClick={() => navigate("/")}
         />
         <div className="flex space-x-5 items-center">
