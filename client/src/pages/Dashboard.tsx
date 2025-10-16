@@ -95,6 +95,7 @@ const Dashboard = () => {
                 background: `linear-gradient(135deg, ${baseColr}10, ${baseColr}40)`,
                 borderColor: baseColr + "40",
               }}
+              onClick={() => navigate(`/app/builder/${resume._id}`)}
             >
               <FilePenLineIcon
                 className="size-7 group-hover:scale-105 transition-all"
