@@ -13,6 +13,7 @@ import {
   Sparkles,
   User,
 } from "lucide-react";
+import PersonalInfoForm from "../components/PersonalInfoForm";
 
 const ResumeBuilder = () => {
   const [resumeData, setResumeData] = useState<any>({
@@ -31,15 +32,17 @@ const ResumeBuilder = () => {
   const [activeSectionIndex, setActiveSectionIndex] = useState(0);
   const [removeBackground, setRemoveBackground] = useState(false);
 
-  const resumeId = useParams();
+  const { resumeId } = useParams();
 
   const loadExistingResume = async () => {
-    const resume = dummyResumeData.filter(
-      (resume: any) => resume._id === resumeId
-    );
+    const resume = dummyResumeData.filter((item: any) => item._id === resumeId);
     if (resume) {
-      setResumeData(resume);
+      setResumeData(resume[0]);
     }
+  };
+
+  const saveResume = async () => {
+    console.log("saving resume");
   };
 
   const sections = [
@@ -84,6 +87,8 @@ const ResumeBuilder = () => {
                   } %`,
                 }}
               />
+
+              {/* Navigation Section */}
               <div className="flex justify-between items-center mb-6 border-b border-gray-300 py-1">
                 <div></div>
                 <div className="flex items-center">
@@ -112,6 +117,25 @@ const ResumeBuilder = () => {
                     <ChevronRight className="size-6 stroke-1" /> Next
                   </button>
                 </div>
+              </div>
+
+              {/* Form Content */}
+              <div className="space-y-6">
+                {activeSection.id === "personal" && (
+                  <div>
+                    <PersonalInfoForm
+                      data={resumeData?.personal_info}
+                      onchange={(data: any) =>
+                        setResumeData((prev: any) => ({
+                          ...prev,
+                          personal_info: data,
+                        }))
+                      }
+                      removeBackground={removeBackground}
+                      setRemoveBackground={setRemoveBackground}
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </div>
