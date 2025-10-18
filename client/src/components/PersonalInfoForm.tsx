@@ -58,7 +58,9 @@ const PersonalInfoForm = ({
     { key: "linkedin", label: "LinkedIn", type: "url", icon: Linkedin },
   ];
 
-  const handleChange = (name: string, value: any) => {};
+  const handleChange = (name: string, value: any) => {
+    onchange({ ...data, [name]: value });
+  };
 
   return (
     <div>
@@ -125,7 +127,7 @@ const PersonalInfoForm = ({
                 type={field.type}
                 value={data?.[field.key] || ""}
                 className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-green-500 focus:border-green-500 outline-none transition-colors text-sm"
-                placeholder={`Enter your ${field.label.toLowerCase()}}`}
+                placeholder={`Enter your ${field.label.toLowerCase()}`}
                 required={field.required}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   handleChange(field.key, e.target.value)
