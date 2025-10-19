@@ -16,6 +16,7 @@ import {
 import PersonalInfoForm from "../components/PersonalInfoForm";
 import ResumePreview from "../components/ResumePreview";
 import TempleateSelector from "../components/TempleateSelector";
+import ColorPicker from "../components/ColorPicker";
 
 const ResumeBuilder = () => {
   const [resumeData, setResumeData] = useState<any>({
@@ -92,11 +93,20 @@ const ResumeBuilder = () => {
 
               {/* Navigation Section */}
               <div className="flex justify-between items-center mb-6 border-b border-gray-300 py-1">
-                <div>
+                <div className="flex items-center gap-2">
                   <TempleateSelector
                     selectedTemplate={resumeData?.template}
-                    onChange={(template: any) =>
+                    onChange={(template: string) =>
                       setResumeData((prev: any) => ({ ...prev, template }))
+                    }
+                  />
+                  <ColorPicker
+                    selectedColor={resumeData?.accent_color}
+                    onChange={(color: string) =>
+                      setResumeData((prev: any) => ({
+                        ...prev,
+                        accent_color: color,
+                      }))
                     }
                   />
                 </div>
@@ -134,7 +144,7 @@ const ResumeBuilder = () => {
                   <div>
                     <PersonalInfoForm
                       data={resumeData?.personal_info}
-                      onchange={(data: any) =>
+                      onchange={(data: string) =>
                         setResumeData((prev: any) => ({
                           ...prev,
                           personal_info: data,
