@@ -18,6 +18,7 @@ import ResumePreview from "../components/ResumePreview";
 import TempleateSelector from "../components/TempleateSelector";
 import ColorPicker from "../components/ColorPicker";
 import ProfessionalSummayForm from "../components/ProfessionalSummayForm";
+import ExperienceForm from "../components/ExperienceForm";
 
 const ResumeBuilder = () => {
   const [resumeData, setResumeData] = useState<any>({
@@ -165,6 +166,17 @@ const ResumeBuilder = () => {
                       }))
                     }
                     setResumeData={setResumeData}
+                  />
+                )}
+                {activeSection.id === "experience" && (
+                  <ExperienceForm
+                    data={resumeData?.experience || []}
+                    onChange={(data: string) =>
+                      setResumeData((prev: any) => ({
+                        ...prev,
+                        experience: data,
+                      }))
+                    }
                   />
                 )}
               </div>
