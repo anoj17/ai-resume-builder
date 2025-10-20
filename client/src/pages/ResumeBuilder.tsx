@@ -19,6 +19,8 @@ import TempleateSelector from "../components/TempleateSelector";
 import ColorPicker from "../components/ColorPicker";
 import ProfessionalSummayForm from "../components/ProfessionalSummayForm";
 import ExperienceForm from "../components/ExperienceForm";
+import Education from "../components/Education";
+import ProjectForm from "../components/ProjectForm";
 
 const ResumeBuilder = () => {
   const [resumeData, setResumeData] = useState<any>({
@@ -55,8 +57,8 @@ const ResumeBuilder = () => {
     { id: "summary", name: "Summary", icon: FileText },
     { id: "experience", name: "Experience", icon: Briefcase },
     { id: "education", name: "Education", icon: GraduationCap },
-    { id: "skills", name: "Skills", icon: FolderIcon },
     { id: "projects", name: "Projects", icon: Sparkles },
+    { id: "skills", name: "Skills", icon: FolderIcon },
   ];
 
   const activeSection = sections[activeSectionIndex];
@@ -175,6 +177,29 @@ const ResumeBuilder = () => {
                       setResumeData((prev: any) => ({
                         ...prev,
                         experience: data,
+                      }))
+                    }
+                  />
+                )}
+
+                {activeSection.id === "education" && (
+                  <Education
+                    data={resumeData?.education || []}
+                    onChange={(data: string) =>
+                      setResumeData((prev: any) => ({
+                        ...prev,
+                        education: data,
+                      }))
+                    }
+                  />
+                )}
+                {activeSection.id === "projects" && (
+                  <ProjectForm
+                    data={resumeData?.projects || []}
+                    onChange={(data: string) =>
+                      setResumeData((prev: any) => ({
+                        ...prev,
+                        projects: data,
                       }))
                     }
                   />
