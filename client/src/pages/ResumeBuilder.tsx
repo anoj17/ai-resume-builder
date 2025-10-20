@@ -17,6 +17,7 @@ import PersonalInfoForm from "../components/PersonalInfoForm";
 import ResumePreview from "../components/ResumePreview";
 import TempleateSelector from "../components/TempleateSelector";
 import ColorPicker from "../components/ColorPicker";
+import ProfessionalSummayForm from "../components/ProfessionalSummayForm";
 
 const ResumeBuilder = () => {
   const [resumeData, setResumeData] = useState<any>({
@@ -83,11 +84,12 @@ const ResumeBuilder = () => {
                 className={`border-2 border-gray-200 absolute top-0 right-0 left-0`}
               />
               <hr
-                className={`bg-gradient-to-r from-green-500 to-green-600 border-none transition-all duration-2000 absolute top-0 left-0 h-1`}
+                className="bg-gradient-to-r from-green-500 to-green-600 border-none absolute top-0 left-0 h-1 rounded-full"
                 style={{
                   width: `${
                     (activeSectionIndex * 100) / (sections.length - 1)
-                  } %`,
+                  }%`,
+                  transition: "width 1s ease-in-out", // 👈 smooth transition
                 }}
               />
 
@@ -125,7 +127,7 @@ const ResumeBuilder = () => {
                   <button
                     onClick={() =>
                       setActiveSectionIndex((prev) =>
-                        Math.max(prev + 1, sections.length - 1)
+                        Math.min(prev + 1, sections.length - 1)
                       )
                     }
                     className={`flex items-center gap-1 p-3 cursor-pointer rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-all ${
@@ -141,19 +143,29 @@ const ResumeBuilder = () => {
               {/* Form Content */}
               <div className="space-y-6">
                 {activeSection.id === "personal" && (
-                  <div>
-                    <PersonalInfoForm
-                      data={resumeData?.personal_info}
-                      onchange={(data: string) =>
-                        setResumeData((prev: any) => ({
-                          ...prev,
-                          personal_info: data,
-                        }))
-                      }
-                      removeBackground={removeBackground}
-                      setRemoveBackground={setRemoveBackground}
-                    />
-                  </div>
+                  <PersonalInfoForm
+                    data={resumeData?.personal_info}
+                    onchange={(data: string) =>
+                      setResumeData((prev: any) => ({
+                        ...prev,
+                        personal_info: data,
+                      }))
+                    }
+                    removeBackground={removeBackground}
+                    setRemoveBackground={setRemoveBackground}
+                  />
+                )}
+                {activeSection.id === "summary" && (
+                  <ProfessionalSummayForm
+                    data={resumeData?.professional_summary}
+                    onChange={(data: string) =>
+                      setResumeData((prev: any) => ({
+                        ...prev,
+                        professional_summary: data,
+                      }))
+                    }
+                    setResumeData={setResumeData}
+                  />
                 )}
               </div>
             </div>
