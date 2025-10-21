@@ -21,6 +21,7 @@ import ProfessionalSummayForm from "../components/ProfessionalSummayForm";
 import ExperienceForm from "../components/ExperienceForm";
 import Education from "../components/Education";
 import ProjectForm from "../components/ProjectForm";
+import Skillsform from "../components/Skillsform";
 
 const ResumeBuilder = () => {
   const [resumeData, setResumeData] = useState<any>({
@@ -200,6 +201,17 @@ const ResumeBuilder = () => {
                       setResumeData((prev: any) => ({
                         ...prev,
                         projects: data,
+                      }))
+                    }
+                  />
+                )}
+                {activeSection.id === "skills" && (
+                  <Skillsform
+                    data={resumeData?.skills || []}
+                    onChange={(data: string) =>
+                      setResumeData((prev: any) => ({
+                        ...prev,
+                        skills: data,
                       }))
                     }
                   />
