@@ -5,14 +5,14 @@ const Skillsform = ({ data, onChange }: any) => {
   const [newSkill, setNewSkill] = React.useState("");
 
   const addSkills = () => {
-    if (newSkill.trim() && !data.newSkills.trim()) {
-      onChange([...data.newSkills, newSkill]);
+    if (newSkill.trim() && !data.includes(newSkill.trim())) {
+      onChange([...data, newSkill]);
       setNewSkill("");
     }
   };
 
   const removeSkill = (index: number) => {
-    onChange(data.newSkills.filter((skill: string, i: number) => i !== index));
+    onChange(data.filter((skill: string, i: number) => i !== index));
   };
 
   const keyPress = (e: any) => {
