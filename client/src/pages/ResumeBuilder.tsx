@@ -1,10 +1,6 @@
-import { useEffect, useState } from "react";
-import { dummyResumeData } from "../assets/assets";
-import { Link, useParams } from "react-router-dom";
 import {
   ArrowLeftIcon,
   Briefcase,
-  ChevronLast,
   ChevronLeft,
   ChevronRight,
   Download,
@@ -17,15 +13,18 @@ import {
   Sparkles,
   User,
 } from "lucide-react";
-import PersonalInfoForm from "../components/PersonalInfoForm";
-import ResumePreview from "../components/ResumePreview";
-import TempleateSelector from "../components/TempleateSelector";
+import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import { dummyResumeData } from "../assets/assets";
 import ColorPicker from "../components/ColorPicker";
-import ProfessionalSummayForm from "../components/ProfessionalSummayForm";
-import ExperienceForm from "../components/ExperienceForm";
 import Education from "../components/Education";
+import ExperienceForm from "../components/ExperienceForm";
+import PersonalInfoForm from "../components/PersonalInfoForm";
+import ProfessionalSummayForm from "../components/ProfessionalSummayForm";
 import ProjectForm from "../components/ProjectForm";
+import ResumePreview from "../components/ResumePreview";
 import Skillsform from "../components/Skillsform";
+import TempleateSelector from "../components/TempleateSelector";
 
 const ResumeBuilder = () => {
   const [resumeData, setResumeData] = useState<any>({
@@ -70,10 +69,6 @@ const ResumeBuilder = () => {
 
   const downloadResume = async () => {
     window.print();
-  };
-
-  const saveResume = async () => {
-    console.log("saving resume");
   };
 
   const sections = [
@@ -278,11 +273,13 @@ const ResumeBuilder = () => {
             </div>
 
             {/* resume preview */}
-            <ResumePreview
-              data={resumeData}
-              template={resumeData?.template}
-              accentColor={resumeData?.accent_color}
-            />
+            <div id="resume-preview">
+              <ResumePreview
+                data={resumeData}
+                template={resumeData?.template}
+                accentColor={resumeData?.accent_color}
+              />
+            </div>
           </div>
           <div></div>
         </div>

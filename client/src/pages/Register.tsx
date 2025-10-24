@@ -1,5 +1,10 @@
+import { useMutation } from "@tanstack/react-query";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { register } from "../api/server";
+import { toast } from "react-toastify";
+import { Loader2 } from "lucide-react";
+import GoogleAuth from "../components/GoogleAuth";
 
 const Register = () => {
   const [formData, setFormData] = React.useState({
@@ -8,20 +13,39 @@ const Register = () => {
     password: "",
   });
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-  };
+  const navigate = useNavigate();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: register,
+    onSuccess: (res) => {
+      console.log({ res });
+      if (res?.success) {
+        toast.success(res?.message);
+        navigate("/login");
+      } else {
+        toast.error(res?.message);
+      }
+    },
+    onError: (error) => {
+      toast.error(error?.message);
+    },
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    mutate(formData);
+  };
+
   return (
     <div className="w-full flex justify-center items-center h-screen">
       <form
         onSubmit={handleSubmit}
-        className="sm:w-[350px] md:w-md w-full text-center border border-gray-300/60 rounded-2xl px-8 bg-white"
+        className="sm:w-[350px] pb-8 md:w-md w-full text-center border border-gray-300/60 rounded-2xl px-8 bg-white"
       >
         <h1 className="text-gray-900 text-3xl mt-10 font-medium">Sign Up</h1>
         <p className="text-gray-500 text-sm mt-2">Please sign in to continue</p>
@@ -111,16 +135,22 @@ const Register = () => {
         </div>
         <button
           type="submit"
-          className="mt-2 w-full h-11 rounded-full text-white bg-green-500 hover:opacity-90 transition-opacity"
+          className="mt-2 w-full h-11 rounded-full cursor-pointer text-white bg-green-500 hover:opacity-90 transition-opacity"
         >
-          Sign Up
+          {isPending ? (
+            <Loader2 className="size-5 mx-auto animate-spin text-white" />
+          ) : (
+            "Sign Up"
+          )}
         </button>
-        <p className="text-gray-500 text-sm mt-3 mb-11">
+        <p className="text-gray-500 text-sm mt-3 mb-3">
           Don't have an account?
           <Link to="/login" className="text-green-500 hover:underline">
             Sign In
           </Link>
         </p>
+
+        <GoogleAuth label="Sign up with Google" />
       </form>
     </div>
   );
