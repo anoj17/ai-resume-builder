@@ -8,10 +8,64 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  email     String   @unique
-  password  String
-  name      String
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  email    String @unique
+  password String
+  name     String
+
+  resumes   Resume[] @relation("resumes")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+type ProfessionalInfo {
+  image      String
+  full_name  String
+  profession String
+  email      String
+  phone      String
+  location   String
+  linkedin   String
+  website    String
+}
+
+type Experience {
+  company     String
+  position    String
+  start_date  String
+  end_date    String
+  description String
+  is_current  Boolean
+}
+
+type Project {
+  name        String
+  type        String
+  description String
+}
+
+type Education {
+  institution     String
+  degree          String
+  field           String
+  graduation_date String
+  gpa             String
+}
+
+model Resume {
+  id                   String           @id @default(auto()) @map("_id") @db.ObjectId
+  userId               String           @db.ObjectId
+  user                 User             @relation("resumes", fields: [userId], references: [id])
+  title                String
+  public               Boolean          @default(false)
+  template             String           @default("classic")
+  accent_color         String           @default("#3B82F6")
+  professional_summary String
+  skills               String[]
+  professional_info    ProfessionalInfo
+  experience           Experience[]
+  education            Education[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

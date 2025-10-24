@@ -14,6 +14,16 @@ export const Register = async (req: any, res: any) => {
   const hashedPassword = await bcrypt.hash(password, 10);
 
   try {
+    const existingUser = await prisma.user.findFirst({
+      where: {
+        email,
+      },
+    });
+    if (existingUser) {
+      return res
+        .status(400)
+        .json({ message: "User already exists", success: false });
+    }
     await prisma.user.create({
       data: {
         email,
@@ -21,14 +31,20 @@ export const Register = async (req: any, res: any) => {
         name,
       },
     });
-    return res.status(201).json({ message: "User created successfully" });
+    return res
+      .status(201)
+      .json({ message: "User created successfully", success: true });
   } catch (error) {
-    return res.status(500).json({ message: "Error creating user" });
+    return res
+      .status(500)
+      .json({ message: "Error creating user....", success: false });
   }
 };
 
 export const Login = async (req: any, res: any) => {
   const { email, password } = req.body;
+
+  console.log(req.body);
 
   if (!email || !password) {
     return res
@@ -95,7 +111,9 @@ export const Login = async (req: any, res: any) => {
       maxAge: 3600 * 1000,
     });
 
-    return res.status(200).json({ token });
+    return res
+      .status(200)
+      .json({ token, success: true, message: "Logged in successfully" });
   } catch (error) {
     return res.status(500).json({ message: "Error logging in" });
   }
