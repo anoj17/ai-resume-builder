@@ -1,7 +1,7 @@
-import { Plus, Sparkles, X } from "lucide-react";
+import { Loader2, Plus, Sparkles, X } from "lucide-react";
 import React from "react";
 
-const Skillsform = ({ data, onChange }: any) => {
+const Skillsform = ({ data, onChange, handleSubmit, isPending }: any) => {
   const [newSkill, setNewSkill] = React.useState("");
 
   const addSkills = () => {
@@ -20,6 +20,11 @@ const Skillsform = ({ data, onChange }: any) => {
       e.preventDefault();
       addSkills();
     }
+  };
+
+  const submitForm = () => {
+    // e.preventDefault();
+    handleSubmit();
   };
   return (
     <div className="space-y-4">
@@ -78,6 +83,18 @@ const Skillsform = ({ data, onChange }: any) => {
           Add your relevant skills. Include both technical skills (programming
           languages, tools) and soft skills (leadership, communication).
         </p>
+      </div>
+      <div className="flex items-end justify-end w-full">
+        <button
+          onClick={submitForm}
+          className="py-1 cursor-pointer mt-3 px-3 min-w-[100px] bg-green-600 hover:bg-green-600/80 text-white rounded-lg"
+        >
+          {isPending ? (
+            <Loader2 className="size-5 mx-auto animate-spin text-white" />
+          ) : (
+            "Save Resume"
+          )}
+        </button>
       </div>
     </div>
   );

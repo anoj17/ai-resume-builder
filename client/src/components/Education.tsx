@@ -1,4 +1,5 @@
-import { Briefcase, Plus, Sparkle, Trash2 } from "lucide-react";
+import { Briefcase, Plus, Trash2 } from "lucide-react";
+import { v4 as uuidv4 } from "uuid";
 
 const Education = ({ data, onChange }: any) => {
   const addEducation = () => {
@@ -7,7 +8,7 @@ const Education = ({ data, onChange }: any) => {
       degree: "",
       field: "",
       graduation_date: "",
-      gpa: "",
+      gpa: uuidv4(),
     };
     onChange([...data, newEducation]);
   };
@@ -93,7 +94,7 @@ const Education = ({ data, onChange }: any) => {
                     updatedEducation(index, "field", e.target.value)
                   }
                   placeholder="Field"
-                  className="px-3 py-2 border border-gray-200 text-sm rounded-lg"
+                  className="px-3 py-2 border border-gray-200 outline-none focus:outline-green-500 focus:ring focus:ring-green-500 text-sm rounded-lg"
                 />
                 <input
                   type="month"

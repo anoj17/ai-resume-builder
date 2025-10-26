@@ -1,4 +1,5 @@
 import { Briefcase, Plus, Sparkle, Trash2 } from "lucide-react";
+import { v4 as uuidv4 } from "uuid";
 
 const ProjectForm = ({ data, onChange }: any) => {
   const addProject = () => {
@@ -6,6 +7,7 @@ const ProjectForm = ({ data, onChange }: any) => {
       name: "",
       type: "",
       description: "",
+      id: uuidv4(),
     };
     onChange([...data, newProject]);
   };

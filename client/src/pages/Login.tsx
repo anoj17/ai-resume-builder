@@ -17,7 +17,6 @@ const Login = () => {
   const { mutate, isPending } = useMutation({
     mutationFn: login,
     onSuccess: (res: { success: boolean; message: string }) => {
-      console.log({ res });
       if (res?.success) {
         toast.success(res?.message);
         navigate("/app");

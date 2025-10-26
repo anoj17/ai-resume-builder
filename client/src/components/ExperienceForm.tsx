@@ -1,4 +1,5 @@
 import { Briefcase, Plus, Sparkle, Trash2 } from "lucide-react";
+import { v4 as uuidv4 } from "uuid";
 
 const ExperienceForm = ({ data, onChange }: any) => {
   const addExperience = () => {
@@ -9,6 +10,7 @@ const ExperienceForm = ({ data, onChange }: any) => {
       end_date: "",
       description: "",
       is_current: false,
+      id: uuidv4(),
     };
     onChange([...data, newExperience]);
   };

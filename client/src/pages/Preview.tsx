@@ -12,7 +12,7 @@ const Preview = () => {
 
   const loadResume = async () => {
     setResumeData(
-      dummyResumeData.filter((item: any) => item._id === resumeId || null)
+      dummyResumeData.filter((item: any) => item.id === resumeId || null)
     );
     setLoading(false);
   };

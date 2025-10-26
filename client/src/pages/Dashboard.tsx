@@ -7,9 +7,11 @@ import {
   UploadCloudIcon,
   XIcon,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { dummyResumeData } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { getAllResumes, getResumeById } from "../api/server";
 
 const Dashboard = () => {
   const colors = ["#9333ea", "#d97706", "#dc2626", "0284c7", "16a34a"];
@@ -24,8 +26,13 @@ const Dashboard = () => {
 
   const navigate = useNavigate();
 
+  const { data } = useQuery({
+    queryKey: ["resumes"],
+    queryFn: getAllResumes,
+  });
+
   const loadResumes = async () => {
-    setAllResumes(dummyResumeData);
+    setAllResumes(data);
   };
 
   const editResume = async () => {
@@ -34,7 +41,7 @@ const Dashboard = () => {
 
   const deleteResume = async (resumeId: string) => {
     const filteredResumes = allResumes.filter(
-      (resume) => resume._id !== resumeId
+      (resume) => resume.id !== resumeId
     );
     setAllResumes(filteredResumes);
     setShowDeleteModal(false);
@@ -85,7 +92,7 @@ const Dashboard = () => {
       <hr className="border-slate-300 max-w-[305px] my-7" />
 
       <div className="grid grid-cols-2 sm:flex flex-wrap gap-4">
-        {allResumes.map((resume, index) => {
+        {data?.resumes?.map((resume: any, index: number) => {
           const baseColr = colors[index % colors.length];
           return (
             <button
@@ -95,7 +102,7 @@ const Dashboard = () => {
                 background: `linear-gradient(135deg, ${baseColr}10, ${baseColr}40)`,
                 borderColor: baseColr + "40",
               }}
-              onClick={() => navigate(`/app/builder/${resume._id}`)}
+              onClick={() => navigate(`/app/builder/${resume.id}`)}
             >
               <FilePenLineIcon
                 className="size-7 group-hover:scale-105 transition-all"
@@ -116,7 +123,7 @@ const Dashboard = () => {
               <div className="group-hover:flex hidden absolute top-1 right-1 items-center">
                 <TrashIcon
                   onClick={() => {
-                    setDeleteResumeId(resume._id);
+                    setDeleteResumeId(resume.id);
                     setShowDeleteModal(true);
                   }}
                   className="size-7 text-slate-700 hover:bg-white/50 p-1.5 transition-colors"
@@ -124,7 +131,7 @@ const Dashboard = () => {
                 <PencilIcon
                   onClick={() => {
                     setTitle(resume.title);
-                    setShowEditResumeId(resume._id);
+                    setShowEditResumeId(resume.id);
                   }}
                   className="size-7 text-slate-700 hover:bg-white/50 p-1.5 transition-colors"
                 />

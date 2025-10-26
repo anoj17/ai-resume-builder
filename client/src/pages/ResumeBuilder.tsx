@@ -25,17 +25,20 @@ import ProjectForm from "../components/ProjectForm";
 import ResumePreview from "../components/ResumePreview";
 import Skillsform from "../components/Skillsform";
 import TempleateSelector from "../components/TempleateSelector";
+import { useMutation } from "@tanstack/react-query";
+import { addResume } from "../api/server";
+import { toast } from "react-toastify";
 
 const ResumeBuilder = () => {
   const [resumeData, setResumeData] = useState<any>({
-    _id: "",
+    id: "",
     title: "",
     personal_info: {},
     professional_summary: "",
     work_experience: [],
     education: [],
     skills: [],
-    projects: [],
+    project: [],
     template: "classic",
     accent_color: "#3B82F6",
     public: "false",
@@ -46,7 +49,7 @@ const ResumeBuilder = () => {
   const { resumeId } = useParams();
 
   const loadExistingResume = async () => {
-    const resume = dummyResumeData.filter((item: any) => item._id === resumeId);
+    const resume = dummyResumeData.filter((item: any) => item.id === resumeId);
     if (resume) {
       setResumeData(resume[0]);
     }
@@ -69,6 +72,23 @@ const ResumeBuilder = () => {
 
   const downloadResume = async () => {
     window.print();
+  };
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: addResume,
+    onSuccess: (res) => {
+      if (res?.success) {
+        toast.success(res?.message);
+      }
+    },
+    onError: (error) => {
+      toast.error(error?.message);
+    },
+  });
+
+  const handleSubmit = async () => {
+    console.log({ resumeData });
+    mutate(resumeData);
   };
 
   const sections = [
@@ -214,17 +234,19 @@ const ResumeBuilder = () => {
                 )}
                 {activeSection.id === "projects" && (
                   <ProjectForm
-                    data={resumeData?.projects || []}
+                    data={resumeData?.project || []}
                     onChange={(data: string) =>
                       setResumeData((prev: any) => ({
                         ...prev,
-                        projects: data,
+                        project: data,
                       }))
                     }
                   />
                 )}
                 {activeSection.id === "skills" && (
                   <Skillsform
+                    handleSubmit={handleSubmit}
+                    isPending={isPending}
                     data={resumeData?.skills || []}
                     onChange={(data: string) =>
                       setResumeData((prev: any) => ({
@@ -256,12 +278,12 @@ const ResumeBuilder = () => {
                   onClick={handleChangePublicOrPrivate}
                   className="flex items-center p-2 px-4 gap-2 cursor-pointer text-xs bg-gradient-to-br from-purple-100 to-purple-200 rounded-lg text-purple-600 ring-purple-300 hover:ring transition-colors"
                 >
-                  {resumeData.public ? (
+                  {resumeData?.public ? (
                     <EyeIcon className="size-4" />
                   ) : (
                     <EyeOffIcon className="size-4" />
                   )}
-                  {resumeData.public ? "Public" : "Private"}
+                  {resumeData?.public ? "Public" : "Private"}
                 </button>
                 <button
                   onClick={downloadResume}
