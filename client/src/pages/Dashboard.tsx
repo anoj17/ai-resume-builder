@@ -1,5 +1,7 @@
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   FilePenLineIcon,
+  Loader2,
   PencilIcon,
   PlusIcon,
   TrashIcon,
@@ -7,50 +9,58 @@ import {
   UploadCloudIcon,
   XIcon,
 } from "lucide-react";
-import { use, useEffect, useState } from "react";
-import { dummyResumeData } from "../assets/assets";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { getAllResumes, getResumeById } from "../api/server";
+import { toast } from "react-toastify";
+import { deleteResumeById, getAllResumes } from "../api/server";
+import { TitleContext } from "../context/TitleContext";
 
 const Dashboard = () => {
   const colors = ["#9333ea", "#d97706", "#dc2626", "0284c7", "16a34a"];
-  const [allResumes, setAllResumes] = useState<any[]>([]);
   const [resume, setResume] = useState<File | null>(null);
   const [showCreateResume, setShowCreateResume] = useState<boolean>(false);
   const [showEditResume, setShowEditResume] = useState<boolean>(false);
-  const [title, setTitle] = useState<string>("");
   const [showEditResumeId, setShowEditResumeId] = useState<string>("");
   const [deleteResumeId, setDeleteResumeId] = useState<string>("");
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
 
+  const { title, setTitle } = useContext(TitleContext);
+
   const navigate = useNavigate();
 
   const { data } = useQuery({
-    queryKey: ["resumes"],
+    queryKey: ["getAllresumes"],
     queryFn: getAllResumes,
   });
-
-  const loadResumes = async () => {
-    setAllResumes(data);
-  };
 
   const editResume = async () => {
     console.log(showEditResumeId);
   };
 
+  const queryClient = useQueryClient();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: deleteResumeById,
+    onSuccess: (res) => {
+      if (res?.success) {
+        toast.success(res?.message);
+        setShowDeleteModal(false);
+        queryClient.invalidateQueries({ queryKey: ["getAllresumes"] });
+      }
+    },
+    onError: (error) => {
+      toast.error(error?.message);
+    },
+  });
+
   const deleteResume = async (resumeId: string) => {
-    const filteredResumes = allResumes.filter(
-      (resume) => resume.id !== resumeId
-    );
-    setAllResumes(filteredResumes);
-    setShowDeleteModal(false);
+    mutate(resumeId);
   };
 
   const createResume = async (e: React.FormEvent) => {
     e.preventDefault();
     setShowCreateResume(false);
-    navigate("/app/builder/123");
+    navigate("/app/builder");
   };
 
   const uploadResume = async (e: React.FormEvent) => {
@@ -58,10 +68,6 @@ const Dashboard = () => {
     setShowEditResume(false);
     navigate("/app/builder/123");
   };
-
-  useEffect(() => {
-    loadResumes();
-  }, []);
   return (
     <div className="pt-10 p-5 md:pl-16 lg:pl-36">
       <div className="mx-auto">
@@ -84,7 +90,7 @@ const Dashboard = () => {
           >
             <UploadCloudIcon className="size-11 transition-all duration-300 p-2.5 rounded-full text-white bg-gradient-to-br from-purple-300 to-purple-500" />
             <p className="text-sm group-hover:text-indigo-600 transition-all duration-300">
-              Create Resume
+              Upload Resume
             </p>
           </button>
         </div>
@@ -122,14 +128,16 @@ const Dashboard = () => {
               </p>
               <div className="group-hover:flex hidden absolute top-1 right-1 items-center">
                 <TrashIcon
-                  onClick={() => {
+                  onClick={(e: any) => {
+                    e.stopPropagation();
                     setDeleteResumeId(resume.id);
                     setShowDeleteModal(true);
                   }}
                   className="size-7 text-slate-700 hover:bg-white/50 p-1.5 transition-colors"
                 />
                 <PencilIcon
-                  onClick={() => {
+                  onClick={(e: any) => {
+                    e.stopPropagation();
                     setTitle(resume.title);
                     setShowEditResumeId(resume.id);
                   }}
@@ -278,7 +286,11 @@ const Dashboard = () => {
                 onClick={() => deleteResume(deleteResumeId)}
                 className="py-2 bg-red-600 w-full text-white cursor-pointer px-4 rounded hover:bg-red-700 transition-colors"
               >
-                Delete
+                {isPending ? (
+                  <Loader2 className="size-5 mx-auto animate-spin text-white" />
+                ) : (
+                  "Delete"
+                )}
               </button>
               <button
                 onClick={() => setShowDeleteModal(false)}

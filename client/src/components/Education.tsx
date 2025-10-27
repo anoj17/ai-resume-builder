@@ -8,7 +8,8 @@ const Education = ({ data, onChange }: any) => {
       degree: "",
       field: "",
       graduation_date: "",
-      gpa: uuidv4(),
+      gpa: "",
+      id: uuidv4(),
     };
     onChange([...data, newEducation]);
   };

@@ -1,16 +1,19 @@
-import React from "react";
+import { useMutation } from "@tanstack/react-query";
+import { Loader2 } from "lucide-react";
+import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { login } from "../api/server";
-import { useMutation } from "@tanstack/react-query";
-import { Loader2 } from "lucide-react";
 import GoogleAuth from "../components/GoogleAuth";
+import AuthContext from "../context/AuthContext";
 
 const Login = () => {
   const [formData, setFormData] = React.useState({
     email: "",
     password: "",
   });
+
+  const { setIsAuthenticated } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
@@ -19,6 +22,8 @@ const Login = () => {
     onSuccess: (res: { success: boolean; message: string }) => {
       if (res?.success) {
         toast.success(res?.message);
+        localStorage.setItem("isAuthenticated", "true");
+        setIsAuthenticated(true);
         navigate("/app");
       } else {
         toast.error(res?.message);

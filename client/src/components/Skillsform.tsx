@@ -1,7 +1,13 @@
 import { Loader2, Plus, Sparkles, X } from "lucide-react";
 import React from "react";
 
-const Skillsform = ({ data, onChange, handleSubmit, isPending }: any) => {
+const Skillsform = ({
+  data,
+  onChange,
+  handleSubmit,
+  isPending,
+  resumeId,
+}: any) => {
   const [newSkill, setNewSkill] = React.useState("");
 
   const addSkills = () => {
@@ -92,7 +98,7 @@ const Skillsform = ({ data, onChange, handleSubmit, isPending }: any) => {
           {isPending ? (
             <Loader2 className="size-5 mx-auto animate-spin text-white" />
           ) : (
-            "Save Resume"
+            <div>{resumeId ? "Update" : "Save"} Resume</div>
           )}
         </button>
       </div>

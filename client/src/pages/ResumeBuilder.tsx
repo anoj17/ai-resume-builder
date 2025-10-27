@@ -13,7 +13,7 @@ import {
   Sparkles,
   User,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { dummyResumeData } from "../assets/assets";
 import ColorPicker from "../components/ColorPicker";
@@ -25,36 +25,56 @@ import ProjectForm from "../components/ProjectForm";
 import ResumePreview from "../components/ResumePreview";
 import Skillsform from "../components/Skillsform";
 import TempleateSelector from "../components/TempleateSelector";
-import { useMutation } from "@tanstack/react-query";
-import { addResume } from "../api/server";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { addResume, getResumeById, updateResume } from "../api/server";
 import { toast } from "react-toastify";
+import { TitleContext } from "../context/TitleContext";
 
 const ResumeBuilder = () => {
-  const [resumeData, setResumeData] = useState<any>({
-    id: "",
-    title: "",
-    personal_info: {},
-    professional_summary: "",
-    work_experience: [],
-    education: [],
-    skills: [],
-    project: [],
-    template: "classic",
-    accent_color: "#3B82F6",
-    public: "false",
-  });
+  const { title } = useContext(TitleContext);
+
   const [activeSectionIndex, setActiveSectionIndex] = useState(0);
   const [removeBackground, setRemoveBackground] = useState(false);
 
   const { resumeId } = useParams();
 
-  const loadExistingResume = async () => {
-    const resume = dummyResumeData.filter((item: any) => item.id === resumeId);
-    if (resume) {
-      setResumeData(resume[0]);
-    }
-  };
+  const [resumeData, setResumeData] = useState<any>({
+    id: "",
+    title: title,
+    personal_info: {},
+    professional_summary: "",
+    experience: [],
+    education: [],
+    skills: [],
+    project: [],
+    template: "classic",
+    accent_color: "#3B82F6",
+    public: false,
+  });
 
+  const { data } = useQuery({
+    queryKey: ["resumes"],
+    queryFn: () => getResumeById(resumeId || ""),
+  });
+
+  // Update state when query data changes
+  useEffect(() => {
+    if (data?.resume) {
+      setResumeData({
+        id: data.resume.id,
+        title: data.resume.title,
+        personal_info: data.resume.personal_info,
+        professional_summary: data.resume.professional_summary,
+        experience: data.resume.experience,
+        education: data.resume.education,
+        skills: data.resume.skills,
+        project: data.resume.project,
+        template: data.resume.template,
+        accent_color: data.resume.accent_color,
+        public: data.resume.isPublic,
+      });
+    }
+  }, [data]);
   const handleChangePublicOrPrivate = async () => {
     setResumeData((prev: any) => ({ ...prev, public: !prev.public }));
   };
@@ -75,7 +95,7 @@ const ResumeBuilder = () => {
   };
 
   const { mutate, isPending } = useMutation({
-    mutationFn: addResume,
+    mutationFn: resumeId ? () => updateResume(resumeId, resumeData) : addResume,
     onSuccess: (res) => {
       if (res?.success) {
         toast.success(res?.message);
@@ -87,7 +107,6 @@ const ResumeBuilder = () => {
   });
 
   const handleSubmit = async () => {
-    console.log({ resumeData });
     mutate(resumeData);
   };
 
@@ -102,9 +121,6 @@ const ResumeBuilder = () => {
 
   const activeSection = sections[activeSectionIndex];
 
-  useEffect(() => {
-    loadExistingResume();
-  }, []);
   return (
     <div>
       <div className="max-w-7xl px-4 py-6 mx-auto">
@@ -246,6 +262,7 @@ const ResumeBuilder = () => {
                 {activeSection.id === "skills" && (
                   <Skillsform
                     handleSubmit={handleSubmit}
+                    resumeId={resumeId}
                     isPending={isPending}
                     data={resumeData?.skills || []}
                     onChange={(data: string) =>

@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import logo from "../assets/logo.svg";
 import { Link } from "react-router-dom";
+import AuthContext from "../context/AuthContext";
 
 const Hero = () => {
   const [menuOpen, setMenuOpen] = React.useState(false);
+
+  const { isAuthenticated } = useContext(AuthContext);
 
   const logos = [
     "https://saasly.prebuiltui.com/assets/companies-logo/instagram.svg",
@@ -38,7 +41,7 @@ const Hero = () => {
 
           <div className="flex gap-2">
             <Link
-              to=""
+              to={isAuthenticated ? "/app" : "/login"}
               className="hidden lg:block px-6 py-2 bg-green-500 hover:bg-green-700 active:scale-95 transition-all rounded-full text-white"
             >
               Get started
@@ -186,8 +189,8 @@ const Hero = () => {
 
           {/* CTA Buttons */}
           <div className="flex items-center gap-4 ">
-            <a
-              href="/"
+            <Link
+              to={isAuthenticated ? "/app" : "/login"}
               className="bg-green-500 hover:bg-green-600 text-white rounded-full px-9 h-12 m-1 ring-offset-2 ring-1 ring-green-400 flex items-center transition-colors"
             >
               Get started
@@ -207,7 +210,7 @@ const Hero = () => {
                 <path d="M5 12h14"></path>
                 <path d="m12 5 7 7-7 7"></path>
               </svg>
-            </a>
+            </Link>
             <button className="flex items-center gap-2 border border-slate-400 hover:bg-green-50 transition rounded-full px-7 h-12 text-slate-700">
               <svg
                 xmlns="http://www.w3.org/2000/svg"

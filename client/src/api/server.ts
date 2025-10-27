@@ -28,6 +28,17 @@ export const login = async (data: { email: string; password: string }) => {
   }
 };
 
+export const logout = async () => {
+  try {
+    const response = await axios.post(`${baseURL}/api/v1/auth/logout`, {
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (error: any) {
+    return error.response.data;
+  }
+};
+
 export const getAllResumes = async () => {
   try {
     const response = await axios.get(`${baseURL}/api/v1/resumes`, {
@@ -50,11 +61,40 @@ export const addResume = async (data: any) => {
   }
 };
 
+export const updateResume = async (resumeId: string, data: any) => {
+  try {
+    const response = await axios.put(
+      `${baseURL}/api/v1/resumes/${resumeId}`,
+      data,
+      {
+        withCredentials: true,
+      }
+    );
+    return response.data;
+  } catch (error: any) {
+    return error.response.data;
+  }
+};
+
 export const getResumeById = async (resumeId: string) => {
   try {
     const response = await axios.get(`${baseURL}/api/v1/resumes/${resumeId}`, {
       withCredentials: true,
     });
+    return response.data;
+  } catch (error: any) {
+    return error.response.data;
+  }
+};
+
+export const deleteResumeById = async (resumeId: string) => {
+  try {
+    const response = await axios.delete(
+      `${baseURL}/api/v1/resumes/${resumeId}`,
+      {
+        withCredentials: true,
+      }
+    );
     return response.data;
   } catch (error: any) {
     return error.response.data;
