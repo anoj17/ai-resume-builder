@@ -126,11 +126,22 @@ const ClassicTemplate = ({ data, accentColor }) => {
             {data?.project.map((proj, index) => (
               <div
                 key={index}
-                className="flex justify-between items-start border-l-3 border-gray-300 pl-6"
+                className="flex flex-col items-start border-l-3 border-gray-300 pl-6"
               >
                 <div>
                   <li className="font-semibold text-gray-800 ">{proj.name}</li>
                   <p className="text-gray-600">{proj.description}</p>
+                </div>
+                {proj.technology_used && (
+                  <p className="text-md text-gray-800">
+                    Technologies Used: {proj.technology_used}
+                  </p>
+                )}
+                <div className="text-md">
+                  {proj?.previewUrl && <h3>Preview URL: {proj.previewUrl}</h3>}
+                </div>
+                <div className="text-md">
+                  {proj?.githubUrl && <h3>GitHub URL: {proj.githubUrl}</h3>}
                 </div>
               </div>
             ))}

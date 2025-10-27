@@ -5,7 +5,9 @@ const ProjectForm = ({ data, onChange }: any) => {
   const addProject = () => {
     const newProject = {
       name: "",
-      type: "",
+      technology_used: "",
+      previewUrl: "",
+      githubUrl: "",
       description: "",
       id: uuidv4(),
     };
@@ -77,10 +79,30 @@ const ProjectForm = ({ data, onChange }: any) => {
 
                 <input
                   type="text"
-                  value={project.type || ""}
-                  onChange={(e) => updateProject(index, "type", e.target.value)}
+                  value={project.technology_used || ""}
+                  onChange={(e) =>
+                    updateProject(index, "technology_used", e.target.value)
+                  }
                   className="px-3 py-2 text-sm rounded-lg outline-none focus:outline-green-500 border border-gray-200 focus:ring focus:ring-green-500"
-                  placeholder="Type of project"
+                  placeholder="Used Technologies"
+                />
+                <input
+                  type="text"
+                  value={project.previewUrl || ""}
+                  onChange={(e) =>
+                    updateProject(index, "previewUrl", e.target.value)
+                  }
+                  className="px-3 py-2 text-sm rounded-lg outline-none focus:outline-green-500 border border-gray-200 focus:ring focus:ring-green-500"
+                  placeholder="Preview URL"
+                />
+                <input
+                  type="text"
+                  value={project.githubUrl || ""}
+                  onChange={(e) =>
+                    updateProject(index, "githubUrl", e.target.value)
+                  }
+                  className="px-3 py-2 text-sm rounded-lg outline-none focus:outline-green-500 border border-gray-200 focus:ring focus:ring-green-500"
+                  placeholder="Github URL"
                 />
               </div>
               <div className="space-y-2 mt-2 w-full">
